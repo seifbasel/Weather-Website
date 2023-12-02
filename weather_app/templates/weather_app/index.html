@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -22,12 +21,12 @@
 
 <body class="bg-gray-100 p-8 fs-10">
   
-  <div class="text-center flex justify-center p-3">
+  <div class="text-center flex justify-center">
     <img src="https://www.svgrepo.com/show/502423/weather.svg" alt="Weather App Logo" class="logo">
   </div>
 
-<h1 class="text-center text-7xl p-3 ">check your weather</h1>
-  <form method="post" class="max-w-md mx-auto bg-white p-8 rounded-md shadow-md mb-8">
+<h1 class="text-center text-7xl  text-white">check your weather</h1>
+  <form method="post" class="max-w-md mx-auto bg-white p-8 pt-5 rounded-md shadow-md mb-8">
     {% csrf_token %}
     <input type="text" name="city1" placeholder="City 1" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500">
     <input type="text" name="city2" placeholder="City 2" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500">

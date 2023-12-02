@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold">{{ weather_data.city }}</h1>
         <h1 class="text-4xl font-bold">{{ weather_data.temperature }}°C</h1>
         <p class="text-gray-600">{{ weather_data.description }}</p>
-        <img src="http://openweathermap.org/img/w/{{ weather_data.icon }}.png" alt="{{ weather_data.description }}" class="mt-4">
+        <img src="http://openweathermap.org/img/w/{{ weather_data.icon }}.png" alt="{{ weather_data.description }}" class="mt-4 flex justify-center">
     </div>
 {% endif %}
 
@@ -15,7 +15,7 @@
                 <h1 class="text-lg font-bold">{{ forecast.day }}</h1>
                 <h1 class="text-2xl font-bold">{{ forecast.min_temp }}°C - {{ forecast.max_temp }}°C</h1>
                 <p class="text-gray-600">{{ forecast.description }}</p>
-                <img src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="{{ forecast.description }}" class="mt-2">
+                <img src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="{{ forecast.description }}" class="mt-2 flex justify-center">
             </div>
         {% endfor %}
     </div>
