@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,7 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <style>
     body {
-      background-image: url('https://images.unsplash.com/photo-1579619572008-3fe9f19748ea?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-image: url('https://images.unsplash.com/photo-1550963934-16f32641abb7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
       background-size: cover;
       background-position: center;
     }
@@ -16,37 +17,73 @@
       max-width: 100px; /* Adjust the size of your logo */
       margin-bottom: 20px;
     }
+
+    .custom-container {
+      max-width: 800px;
+    }
+
+    .weather-form input,
+    .weather-form button {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .weather-result {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+    }
+
+    .weather-card {
+      width: 48%;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .weather-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .weather-card img {
+      max-width: 50px;
+    }
   </style>
 </head>
 
-<body class="bg-gray-100 p-8 fs-10">
-  
+<body class="bg-gray-100 p-8">
+
   <div class="text-center flex justify-center">
     <img src="https://www.svgrepo.com/show/502423/weather.svg" alt="Weather App Logo" class="logo">
   </div>
 
-<h1 class="text-center text-7xl  text-white">check your weather</h1>
-  <form method="post" class="max-w-md mx-auto bg-white p-8 pt-5 rounded-md shadow-md mb-8">
-    {% csrf_token %}
-    <input type="text" name="city1" placeholder="City 1" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500">
-    <input type="text" name="city2" placeholder="City 2" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500">
-    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
-      Compare Weather
-    </button>
-  </form>
+  <h1 class="text-center text-5xl text-white mb-4">Check Your Weather</h1>
 
-  <div class="flex justify-center space-x-8">
-    {% if weather_data1 %}
-      <div class="bg-white p-8 rounded-md shadow-md">
-        {% include 'weather_app/city_weather.html' with weather_data=weather_data1 daily_forecasts=daily_forecasts1 %}
-      </div>
-    {% endif %}
+  <div class="custom-container mx-auto">
+    <form method="post" class="weather-form bg-white p-8 rounded-md shadow-md mb-8">
+      {% csrf_token %}
+      <input type="text" name="city1" placeholder="City 1" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500">
+      <input type="text" name="city2" placeholder="City 2" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500">
+      <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+        Compare Weather
+      </button>
+    </form>
 
-    {% if weather_data2 %}
-      <div class="bg-white p-8 rounded-md shadow-md">
-        {% include 'weather_app/city_weather.html' with weather_data=weather_data2 daily_forecasts=daily_forecasts2 %}
-      </div>
-    {% endif %}
+    <div class="weather-result">
+      {% if weather_data1 %}
+        <div class="weather-card">
+          {% include 'weather_app/city_weather.html' with weather_data=weather_data1 daily_forecasts=daily_forecasts1 %}
+        </div>
+      {% endif %}
+
+      {% if weather_data2 %}
+        <div class="weather-card">
+          {% include 'weather_app/city_weather.html' with weather_data=weather_data2 daily_forecasts=daily_forecasts2 %}
+        </div>
+      {% endif %}
+    </div>
   </div>
 
 </body>
