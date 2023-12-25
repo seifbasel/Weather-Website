@@ -46,6 +46,6 @@ Contributions are welcome! If you have ideas for new features, improvements, or 
 This project is licensed under the MIT License, allowing for free use, modification, and distribution.
 
 ## UI Screenshots
-![website ui](1.png)
-![website ui](2.png)
-![website ui](3.png)
+![website ui](4.png)
+![website ui](5.png)
+![website ui](6.png)
