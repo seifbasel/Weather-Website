@@ -10,6 +10,7 @@ Welcome to the Weather App, a Django-based web application that allows users to 
 - [Usage](#usage)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
+- [User Interface](#User-Interface)
 - [License](#license)
 
 ## Introduction
@@ -42,8 +43,8 @@ Optionally, compare the weather and forecast for two cities side by side.
 ## Contributing
 Contributions are welcome! If you have ideas for new features, improvements, or bug fixes, please open an issue or submit a pull request. Your input is valuable.
 
+## User Interface
+![website UI](weather-websit.png)
+
 ## License
 This project is licensed under the MIT License, allowing for free use, modification, and distribution.
-
-## UI Screenshots
-![website UI](weather-websit.png)
