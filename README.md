@@ -46,4 +46,4 @@ Contributions are welcome! If you have ideas for new features, improvements, or 
 This project is licensed under the MIT License, allowing for free use, modification, and distribution.
 
 ## UI Screenshots
-[website UI](weather-websit.png)
+(weather-websit.png)
