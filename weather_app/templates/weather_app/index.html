@@ -3,87 +3,103 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weather App</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather App - Compare Cities</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <style>
     .logo {
-      max-width: 100px; /* Adjust the size of your logo */
+      max-width: 100px;
       margin-bottom: 20px;
-    }
-
-    .custom-container {
-      max-width: 800px;
-    }
-
-    .weather-form input,
-    .weather-form button {
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-
-    .weather-result {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 2rem;
-    }
-
-    .weather-card {
-      width: 48%;
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .weather-card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .weather-card img {
-      max-width: 50px;
     }
   </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-400 to-indigo-600 p-8 min-h-screen flex flex-col items-center justify-center">
+<body class="min-h-screen font-sans text-gray-900 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700">
+  <div class="container p-6 mx-auto">
 
-  <!-- Logo Section -->
-  <div class="text-center mb-8">
-    <img src="https://www.svgrepo.com/show/502423/weather.svg" alt="Weather App Logo" class="logo mx-auto w-20 h-20 animate-bounce">
-  </div>
+    <!-- Logo & Title -->
+    <div class="flex flex-col items-center mb-10">
+      <img src="https://www.svgrepo.com/show/502423/weather.svg" alt="Weather App Logo" class="logo animate-bounce" />
+      <h1 class="mt-4 text-5xl font-extrabold text-center text-white drop-shadow-lg">Check & Compare Weather</h1>
+    </div>
 
-  <!-- Title Section -->
-  <h1 class="text-center text-6xl text-white font-bold mb-8 drop-shadow-lg">Check Your Weather</h1>
-
-  <!-- Weather Form Section -->
-  <div class="custom-container mx-auto w-full max-w-md">
-    <form method="post" class="weather-form bg-white bg-opacity-90 p-8 rounded-lg shadow-lg backdrop-blur-sm mb-8 transform transition-transform duration-300 hover:scale-105">
+    <!-- Form -->
+    <form method="post" class="max-w-md mx-auto mb-12 p-8 bg-white bg-opacity-90 rounded-xl shadow-lg backdrop-blur-sm hover:scale-[1.02] transform transition duration-300">
       {% csrf_token %}
-      <input type="text" name="city1" placeholder="City 1" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500 text-gray-700">
-      <input type="text" name="city2" placeholder="City 2" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-blue-500 text-gray-700">
-      <button type="submit" class="w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 active:bg-blue-800 transform transition-transform duration-300 hover:scale-105">
+      <input
+        type="text"
+        name="city1"
+        placeholder="Enter City 1"
+        required
+        class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <input
+        type="text"
+        name="city2"
+        placeholder="Enter City 2 (optional)"
+        class="w-full px-4 py-3 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        type="submit"
+        class="w-full py-3 font-semibold text-white transition bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-400 active:bg-blue-800"
+      >
         Compare Weather
       </button>
     </form>
 
-    <!-- Weather Result Section -->
-    <div class="weather-result grid grid-cols-1 gap-8">
+    <!-- Weather Results Grid -->
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2">
+      <!-- City 1 Weather Card -->
       {% if weather_data1 %}
-        <div class="weather-card p-6 bg-white bg-opacity-90 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
-          {% include 'weather_app/city_weather.html' with weather_data=weather_data1 daily_forecasts=daily_forecasts1 %}
+      <section class="flex flex-col p-6 bg-white shadow-lg bg-opacity-90 rounded-xl">
+        <h2 class="mb-4 text-3xl font-extrabold text-center">{{ weather_data1.city }}</h2>
+
+        <!-- Current Weather -->
+        <div class="flex items-center justify-center mb-6 space-x-6">
+          <img src="http://openweathermap.org/img/w/{{ weather_data1.icon }}.png" alt="{{ weather_data1.description }}" class="w-24 h-24" />
+          <div>
+            <p class="text-6xl font-bold">{{ weather_data1.temperature }}°C</p>
+            <p class="text-lg text-gray-700 capitalize">{{ weather_data1.description }}</p>
+            <p class="mt-1 text-sm italic text-gray-600">Last updated: {{ weather_data1.last_updated }}</p>
+          </div>
         </div>
+
+        <!-- Extra Current Details -->
+        <div class="grid grid-cols-2 gap-4 mb-6 text-sm font-medium text-gray-800">
+          <div><strong>Feels Like:</strong> {{ weather_data1.feels_like }}°C</div>
+          <div><strong>Humidity:</strong> {{ weather_data1.humidity }}%</div>
+          <div><strong>Wind Speed:</strong> {{ weather_data1.wind_speed }} m/s</div>
+          <div><strong>Pressure:</strong> {{ weather_data1.pressure }} hPa</div>
+        </div>
+      </section>
       {% endif %}
 
+      <!-- City 2 Weather Card -->
       {% if weather_data2 %}
-        <div class="weather-card p-6 bg-white bg-opacity-90 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
-          {% include 'weather_app/city_weather.html' with weather_data=weather_data2 daily_forecasts=daily_forecasts2 %}
+      <section class="flex flex-col p-6 bg-white shadow-lg bg-opacity-90 rounded-xl">
+        <h2 class="mb-4 text-3xl font-extrabold text-center">{{ weather_data2.city }}</h2>
+
+        <!-- Current Weather -->
+        <div class="flex items-center justify-center mb-6 space-x-6">
+          <img src="http://openweathermap.org/img/w/{{ weather_data2.icon }}.png" alt="{{ weather_data2.description }}" class="w-24 h-24" />
+          <div>
+            <p class="text-6xl font-bold">{{ weather_data2.temperature }}°C</p>
+            <p class="text-lg text-gray-700 capitalize">{{ weather_data2.description }}</p>
+            <p class="mt-1 text-sm italic text-gray-600">Last updated: {{ weather_data2.last_updated }}</p>
+          </div>
         </div>
+
+        <!-- Extra Current Details -->
+        <div class="grid grid-cols-2 gap-4 mb-6 text-sm font-medium text-gray-800">
+          <div><strong>Feels Like:</strong> {{ weather_data2.feels_like }}°C</div>
+          <div><strong>Humidity:</strong> {{ weather_data2.humidity }}%</div>
+          <div><strong>Wind Speed:</strong> {{ weather_data2.wind_speed }} m/s</div>
+          <div><strong>Pressure:</strong> {{ weather_data2.pressure }} hPa</div>
+        </div>
+      </section>
       {% endif %}
     </div>
   </div>
-
 </body>
 
 </html>

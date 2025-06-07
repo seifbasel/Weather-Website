@@ -1,24 +1,23 @@
 {% if weather_data %}
-    <div class="text-center">
-        <h1 class="text-2xl font-bold">{{ weather_data.city }}</h1>
-        <h1 class="text-4xl font-bold">{{ weather_data.temperature }}°C</h1>
-        <p class="text-gray-600">{{ weather_data.description }}</p>
-        <img src="http://openweathermap.org/img/w/{{ weather_data.icon }}.png" alt="{{ weather_data.description }}" class="mt-4 flex justify-center">
+    <div class="max-w-md p-6 mx-auto text-center rounded-lg shadow-lg bg-blue-50">
+        <h1 class="mb-2 text-3xl font-extrabold">{{ weather_data.city }}</h1>
+        <div class="flex items-center justify-center space-x-4">
+            <img src="http://openweathermap.org/img/w/{{ weather_data.icon }}.png" alt="{{ weather_data.description }}" class="w-20 h-20">
+            <div>
+                <h2 class="text-5xl font-bold">{{ weather_data.temperature }}°C</h2>
+                <p class="text-gray-700 capitalize">{{ weather_data.description }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mt-4 text-sm text-left text-gray-800">
+            <div><strong>Feels like:</strong> {{ weather_data.feels_like }}°C</div>
+            <div><strong>Humidity:</strong> {{ weather_data.humidity }}%</div>
+            <div><strong>Wind Speed:</strong> {{ weather_data.wind_speed }} m/s</div>
+            <div><strong>Pressure:</strong> {{ weather_data.pressure }} hPa</div>
+        </div>
+
+        <p class="mt-3 text-sm italic text-gray-600">Last updated: {{ weather_data.last_updated }}</p>
     </div>
 {% endif %}
 
-
-{% if daily_forecasts %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-        {% for forecast in daily_forecasts %}
-            <div class="bg-white p-4 rounded-md shadow-md">
-                <h1 class="text-lg font-bold">{{ forecast.day }}</h1>
-                <h1 class="text-2xl font-bold">{{ forecast.min_temp }}°C - {{ forecast.max_temp }}°C</h1>
-                <p class="text-gray-600">{{ forecast.description }}</p>
-                <img src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="{{ forecast.description }}" class="mt-2 flex justify-center">
-            </div>
-        {% endfor %}
-    </div>
-{% else %}
-    <p>No daily forecasts available.</p>
 {% endif %}

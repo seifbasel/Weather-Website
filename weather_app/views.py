@@ -1,76 +1,64 @@
 from django.shortcuts import render
-import requests
 import datetime
+import httpx
+
 
 def index(request):
-    api_key = '367d7387bb55aef612f80d2b7a0df5e2'
-    current_weather_url = 'https://api.openweathermap.org/data/2.5/weather?q={}&appid={}'
-    forecast_url = 'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exclude=current,minutely,hourly,alerts&appid={}'
+    api_key = "367d7387bb55aef612f80d2b7a0df5e2"
+    current_weather_url = (
+        "https://api.openweathermap.org/data/2.5/weather?q={}&appid={}"
+    )
 
-    if request.method == 'POST':
-        city1 = request.POST['city1']
-        city2 = request.POST.get('city2', None)
+    if request.method == "POST":
+        city1 = request.POST["city1"]
+        city2 = request.POST.get("city2", None)
 
-        weather_data1, daily_forecasts1 = fetch_weather_and_forecast(city1, api_key, current_weather_url, forecast_url)
+        weather_data1 = fetch_weather(
+            city1, api_key, current_weather_url
+        )
 
         if city2:
-            weather_data2, daily_forecasts2 = fetch_weather_and_forecast(city2, api_key, current_weather_url,forecast_url)
+            weather_data2 = fetch_weather(
+                city2, api_key, current_weather_url
+            )
         else:
-            weather_data2, daily_forecasts2 = None, None
+            weather_data2 = None
 
         context = {
-            'weather_data1': weather_data1,
-            'daily_forecasts1': daily_forecasts1,
-            'weather_data2': weather_data2,
-            'daily_forecasts2': daily_forecasts2,
+            "weather_data1": weather_data1,
+            "weather_data2": weather_data2,
         }
 
-        return render(request, 'weather_app/index.html', context)
-    else:
-        return render(request, 'weather_app/index.html')
+        return render(request, "weather_app/index.html", context)
+
+    return render(request, "weather_app/index.html")
 
 
-
-
-
-
-def fetch_weather_and_forecast(city, api_key, current_weather_url, forecast_url):
+def fetch_weather(city, api_key, current_weather_url):
     try:
-        response = requests.get(current_weather_url.format(city, api_key)).json()
+        with httpx.Client() as client:
+            response = client.get(current_weather_url.format(city, api_key)).json()
 
-        # Check if 'coord' and 'weather' keys are present in the response
-        if 'coord' in response and 'weather' in response:
-            lat, lon = response['coord']['lat'], response['coord']['lon']
-            
-            try:
-                forecast_response = requests.get(forecast_url.format(lat, lon,api_key)).json()
-
+            if "coord" in response and "weather" in response:
                 weather_data = {
-                    'city': city,
-                    'temperature': round(response['main']['temp'] - 273.15, 2),
-                    'description': response['weather'][0]['description'],
-                    'icon': response['weather'][0]['icon'],
+                    "city": city,
+                    "temperature": int(round(response["main"]["temp"] - 273.15, 2)),
+                    "feels_like": int(round(response["main"]["feels_like"] - 273.15, 2)),
+                    "humidity": response["main"]["humidity"],
+                    "pressure": response["main"]["pressure"],
+                    "wind_speed": response["wind"]["speed"],
+                    "description": response["weather"][0]["description"],
+                    "icon": response["weather"][0]["icon"],
+                    "last_updated": datetime.datetime.utcfromtimestamp(
+                        response["dt"]
+                    ).strftime("%Y-%m-%d %H:%M UTC"),
                 }
-                daily_forecasts = []
-                for daily_data in forecast_response.get('daily', [])[:5]:
-                        daily_forecasts.append({
-                            'day': datetime.datetime.fromtimestamp(daily_data['dt']).strftime('%A'),
-                            'min_temp': round(daily_data['temp']['min'] - 273.15, 2),
-                            'max_temp': round(daily_data['temp']['max'] - 273.15, 2),
-                            'description': daily_data['weather'][0]['description'],
-                            'icon': daily_data['weather'][0]['icon'],
-                        })
 
-                return weather_data, daily_forecasts
-
-            except requests.RequestException as e:
-                print(f"Forecast API request failed: {e}")
+                return weather_data
+            else:
+                print("Incomplete data in current weather API response.")
                 return None, None
 
-        else:
-            print("Incomplete data in current weather API response.")
-            return None, None
-
-    except requests.RequestException as e:
-        print(f"Current weather API request failed: {e}")
+    except httpx.RequestError as e:
+        print(f"HTTPX request failed: {e}")
         return None, None
