@@ -1,10 +1,15 @@
 from django.shortcuts import render
 import datetime
 import httpx
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # load environment variables from .env
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
 
 def index(request):
-    api_key = "367d7387bb55aef612f80d2b7a0df5e2"
+    api_key = OPENWEATHER_API_KEY
     current_weather_url = (
         "https://api.openweathermap.org/data/2.5/weather?q={}&appid={}"
     )
